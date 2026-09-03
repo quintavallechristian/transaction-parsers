@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
 }
 
-group = "io.github.transactionbridge"
+group = "io.github.quintavallechristian"
 version = System.getenv("PACKAGE_VERSION") ?: "0.1.0"
 
 java {

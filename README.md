@@ -5,7 +5,7 @@ Pure Java parsers that turn supported Android payment notifications into validat
 ## Use
 
 ```kotlin
-implementation("io.github.transactionbridge:transaction-parsers:0.1.0")
+implementation("io.github.quintavallechristian:transaction-parsers:0.1.0")
 ```
 
 Packages are published to GitHub Packages. Configure the repository
