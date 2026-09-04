@@ -11,6 +11,8 @@ implementation("io.github.quintavallechristian:transaction-parsers:0.1.1")
 Packages are published to GitHub Packages. Configure
 `https://maven.pkg.github.com/quintavallechristian/transaction-parsers` with a GitHub username and a token with `read:packages`.
 
+For a complete Android integration example, see [Transaction Bridge](https://github.com/quintavallechristian/android-transaction-bridge), an app that uses this library to parse payment notifications and deliver the resulting transactions to a webhook.
+
 ## Supported notification formats
 
 Each parser receives a notification timestamp and raw text, normalizes whitespace, and returns `null` when the text does not match one of the supported formats. Android clients normally build the raw text by joining the notification title, text, and expanded text.
@@ -50,6 +52,10 @@ An optional card-payment suffix such as `Saldo di ...` is accepted.
 ### American Express
 
 - Card payments: `Merchant Name 12,50 €`
+
+### Advanzia
+
+- Card payments: `Transazione con Carta Un pagamento di 12,50 € tramite la carta Mastercard che finisce con 1234 verso Merchant Name è stato effettuato correttamente.`
 
 ### Google Wallet
 

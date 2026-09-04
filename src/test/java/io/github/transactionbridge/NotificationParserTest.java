@@ -68,6 +68,17 @@ public final class NotificationParserTest {
         assertEquals("EXAMPLE HOTEL", amex.merchant);
         assertEquals("amex-notification", amex.source);
         assertNull(new AmexNotificationParser().parse(TIME, "12,50 €"));
+
+        Transaction advanzia = new AdvanziaNotificationParser().parse(TIME,
+                "Transazione con Carta Un pagamento di 9,16 € tramite la carta Mastercard che finisce "
+                        + "con 1234 verso EXAMPLE MARKET S.R.L. è stato effettuato correttamente.");
+        assertEquals("9.16", advanzia.amount.toPlainString());
+        assertEquals("EUR", advanzia.currency);
+        assertEquals("EXAMPLE MARKET S.R.L.", advanzia.merchant);
+        assertEquals("advanzia-notification", advanzia.source);
+        assertNull(new AdvanziaNotificationParser().parse(TIME,
+                "Transazione con Carta Un pagamento di 9,16 € tramite la carta Mastercard che finisce "
+                        + "con 1234 verso EXAMPLE MARKET S.R.L. non è stato effettuato correttamente."));
     }
 
     @Test public void parsesIsyBankDateAndMaskedTransferWithoutOwnerNames() {
@@ -134,6 +145,7 @@ public final class NotificationParserTest {
         assertProvider(registry, ParserRegistry.BBVA_PACKAGE, "bbva", "BBVA");
         assertProvider(registry, ParserRegistry.HYPE_PACKAGE, "hype", "HYPE");
         assertProvider(registry, ParserRegistry.AMEX_PACKAGE, "amex", "American Express");
+        assertProvider(registry, ParserRegistry.ADVANZIA_PACKAGE, "advanzia", "Advanzia");
         assertNull(registry.providerFor("com.example.other"));
     }
 
