@@ -11,18 +11,55 @@ implementation("io.github.quintavallechristian:transaction-parsers:0.1.1")
 Packages are published to GitHub Packages. Configure
 `https://maven.pkg.github.com/quintavallechristian/transaction-parsers` with a GitHub username and a token with `read:packages`.
 
-## Supported formats
+## Supported notification formats
 
-- **Crypto.com:** card payments and processed EUR deposits.
-- **IsyBank:** direct debits and outgoing instant or European transfers.
-- **ING:** authorized card payments and paid direct debits.
-- **Revolut:** card payments and completed outgoing transfers.
-- **BBVA:** accepted card payments.
-- **HYPE:** card payments.
-- **American Express:** card payments.
-- **Google Wallet:** card payments whose final four card digits exist in the supplied card map.
+Each parser receives a notification timestamp and raw text, normalizes whitespace, and returns `null` when the text does not match one of the supported formats. Android clients normally build the raw text by joining the notification title, text, and expanded text.
 
-Parsers normalize whitespace and return `null` for unrelated or invalid notifications. Google Wallet uses the caller-provided card name in the transaction `source`; it does not reconcile duplicate notifications from the underlying provider.
+### Crypto.com
+
+- Card payments: `12.50 EUR spent at Merchant Name`
+- EUR deposits: `You successfully deposited EUR 100.00 into your EUR Account`
+
+### IsyBank
+
+- Direct debits: `È stato addebitato il pagamento di una domiciliazione di 12,50 € da parte di Merchant Name sul conto ... in data 15.08.2026`
+- Instant or European transfers: `È stato inserito un bonifico istantaneo di 250,00 € dal conto ... in favore dell'IBAN IT... in data 15.08.2026 alle ore 10:30`
+
+For transfers, the merchant is recorded as `Bonifico` followed by the IBAN. The date and time in the notification are used as the transaction time.
+
+### ING
+
+- Authorized card payments: `Operazione autorizzata: 12,50 euro, Merchant Name. Non sei stato tu?`
+- Direct debits: `Addebito diretto di 12,50 euro richiesto da Creditor id. ABC123 Merchant Name: pagato!`
+
+### Revolut
+
+- Card payments: `Merchant Name Hai speso 12,50 €`
+- Outgoing transfers: `Hai inviato 125 € a Recipient Name. Arriverà in pochi secondi`
+
+An optional card-payment suffix such as `Saldo di ...` is accepted.
+
+### BBVA
+
+- Accepted card payments: `Il pagamento di 12,50 EUR in data Merchant Name effettuato con la tua carta 1234 è stato accettato.`
+
+### HYPE
+
+- Card payments: `Merchant Name, City 12,50 €`
+
+### American Express
+
+- Card payments: `Merchant Name 12,50 €`
+
+### Google Wallet
+
+- Card payments: `Merchant Name 12,50 € con ... •••• 1234`
+
+The final four card digits must exist in the card map supplied by the caller. Notifications from unknown cards are ignored.
+
+The caller-provided card name becomes part of the transaction `source`, for example `google-wallet-personal-ing-notification` or `google-wallet-crypto-notification`. The parser never needs the full card number.
+
+Google Wallet notifications are not reconciled with notifications from the underlying bank or card provider. If both sources report the same payment, they produce different `source` and transaction IDs and may therefore be treated as two separate transactions.
 
 ## Build
 
