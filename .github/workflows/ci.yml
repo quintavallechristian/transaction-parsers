@@ -18,3 +18,13 @@ jobs:
           java-version: '17'
       - uses: gradle/actions/setup-gradle@v6
       - run: ./gradlew test
+
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Reject likely secrets and personal data
+        run: |
+          ! git grep -nE '(BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|Bearer[[:space:]]+[A-Za-z0-9._-]{20,}|https://[^[:space:]]+@|[0-9]{16,})' -- ':!LICENSE' ':!.git*'
