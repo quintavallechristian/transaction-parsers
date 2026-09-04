@@ -2,6 +2,15 @@
 
 Pure Java parsers that turn supported Android payment notifications into validated transactions. The library has no Android or network dependencies.
 
+This project is open source under the [MIT License](LICENSE), and contributions are welcome.
+
+## Contribute
+
+- **Developers:** add a parser by following [Adding a notification provider](docs/ADDING_A_PROVIDER.md), run `./gradlew test`, and open a pull request.
+- **Non-developers:** [open a provider request](https://github.com/quintavallechristian/transaction-parsers/issues/new?title=Add%20support%20for%20%5Bprovider%5D) with the provider name, Android app version and package name, if known, plus an anonymized payment-notification screenshot or its exact text.
+
+Never share real names, account identifiers, IBANs, card numbers, notification IDs, or other personal information. See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete contribution and privacy requirements.
+
 ## Use
 
 ```kotlin
