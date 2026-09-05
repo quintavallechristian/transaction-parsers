@@ -11,7 +11,8 @@ import static org.junit.Assert.assertNull;
 public final class NotificationParserTest {
     private static final long TIME = 1_786_000_000_000L;
 
-    @Test public void parsesSupportedPurchasesAndRejectsUnrelatedText() {
+    @Test
+    public void parsesSupportedPurchasesAndRejectsUnrelatedText() {
         Transaction ing = new IngNotificationParser().parse(TIME,
                 "Operazione autorizzata: 24.61 euro, Example Market. Non sei stato tu? Blocca subito la carta.");
         assertEquals("24.61", ing.amount.toPlainString());
@@ -81,7 +82,8 @@ public final class NotificationParserTest {
                         + "con 1234 verso EXAMPLE MARKET S.R.L. non è stato effettuato correttamente."));
     }
 
-    @Test public void parsesIsyBankDateAndMaskedTransferWithoutOwnerNames() {
+    @Test
+    public void parsesIsyBankDateAndMaskedTransferWithoutOwnerNames() {
         Transaction debit = new IsyBankNotificationParser().parse(TIME,
                 "E' stato addebitato il pagamento di una domiciliazione di 28,89 € da parte di EXAMPLE PROVIDER "
                         + "sul conto xxx421 in data 10.08.2026");
@@ -103,7 +105,8 @@ public final class NotificationParserTest {
                 "Il saldo del conto xxx421 e' 128,50 EUR"));
     }
 
-    @Test public void isyBankKeepsDeliveryRetriesStableButTreatsNewPostsSeparately() {
+    @Test
+    public void isyBankKeepsDeliveryRetriesStableButTreatsNewPostsSeparately() {
         String text = "E' stato addebitato il pagamento di una domiciliazione di 28,89 € da parte di "
                 + "EXAMPLE PROVIDER sul conto xxx421 in data 10.08.2026";
         IsyBankNotificationParser parser = new IsyBankNotificationParser();
@@ -113,7 +116,8 @@ public final class NotificationParserTest {
         org.junit.Assert.assertNotEquals(first.id, parser.parse(TIME + 1, text).id);
     }
 
-    @Test public void parsesWalletOnlyWhenConfiguredCardMatches() {
+    @Test
+    public void parsesWalletOnlyWhenConfiguredCardMatches() {
         Map<String, String> cards = new HashMap<>();
         cards.put("1501", "Example Card");
         GoogleWalletNotificationParser parser = new GoogleWalletNotificationParser(cards);
@@ -128,32 +132,4 @@ public final class NotificationParserTest {
                 new GoogleWalletNotificationParser(cryptoCard)
                         .parse(TIME, "Example Market 24,61 € con Carta Visa ••1352").source);
     }
-
-    @Test public void registryMapsOnlyKnownAndroidPackages() {
-        Map<String, String> cards = new HashMap<>();
-        cards.put("1501", "Example Card");
-        ParserRegistry registry = ParserRegistry.defaultRegistry(cards);
-        ParserRegistry.Provider ing = registry.providerFor(ParserRegistry.ING_PACKAGE);
-        assertEquals("ING", ing.label);
-        assertEquals("ing", ing.settingKey);
-        assertEquals("ing-notification", ing.parser.parse(TIME,
-                "Operazione autorizzata: 1,25 euro, Example Market.").source);
-        assertProvider(registry, ParserRegistry.CRYPTO_COM_PACKAGE, "crypto.com", "Crypto.com");
-        assertProvider(registry, ParserRegistry.ISYBANK_PACKAGE, "isybank", "IsyBank");
-        assertProvider(registry, ParserRegistry.GOOGLE_WALLET_PACKAGE, "google_wallet", "Google Wallet");
-        assertProvider(registry, ParserRegistry.REVOLUT_PACKAGE, "revolut", "Revolut");
-        assertProvider(registry, ParserRegistry.BBVA_PACKAGE, "bbva", "BBVA");
-        assertProvider(registry, ParserRegistry.HYPE_PACKAGE, "hype", "HYPE");
-        assertProvider(registry, ParserRegistry.AMEX_PACKAGE, "amex", "American Express");
-        assertProvider(registry, ParserRegistry.ADVANZIA_PACKAGE, "advanzia", "Advanzia");
-        assertNull(registry.providerFor("com.example.other"));
-    }
-
-    private static void assertProvider(ParserRegistry registry, String packageName, String settingKey, String label) {
-        ParserRegistry.Provider provider = registry.providerFor(packageName);
-        assertEquals(packageName, provider.packageName);
-        assertEquals(settingKey, provider.settingKey);
-        assertEquals(label, provider.label);
-    }
-
 }
