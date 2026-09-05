@@ -76,6 +76,10 @@ The caller-provided card name becomes part of the transaction `source`, for exam
 
 Google Wallet notifications are not reconciled with notifications from the underlying bank or card provider. If both sources report the same payment, they produce different `source` and transaction IDs and may therefore be treated as two separate transactions.
 
+### N26
+
+- Card payments: `Your payment of €<amount> to <merchant> has been successfully processed.`
+
 ## Build
 
 ```sh
