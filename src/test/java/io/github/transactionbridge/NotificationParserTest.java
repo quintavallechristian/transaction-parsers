@@ -36,6 +36,10 @@ public final class NotificationParserTest {
         Transaction revolut = new RevolutNotificationParser().parse(TIME,
                 "Example Petrol ⛽ Hai speso 28,80 € Saldo di EUR: 669,78 €");
         assertEquals("28.80", revolut.amount.toPlainString());
+        Transaction revolutBankTransfer = new RevolutNotificationParser().parse(TIME,
+                "Example Capital Bank GmbH 📅 Hai pagato 200 € Saldo: 143,70 €");
+        assertEquals("200", revolutBankTransfer.amount.toPlainString());
+        assertEquals("Example Capital Bank GmbH", revolutBankTransfer.merchant);
         assertNull(new RevolutNotificationParser().parse(TIME,
                 "Hai ricevuto 28,80 € da Another Person"));
 

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.3 - 2026-09-10
+
+- Support Revolut `Hai pagato ... Saldo: ...` payment notifications.
+
 ## 0.1.1 - 2026-09-03
 
 - Parse completed outgoing Revolut transfers.

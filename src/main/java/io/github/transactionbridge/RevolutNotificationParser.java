@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /** Parses card payments and completed outgoing transfers. */
 public final class RevolutNotificationParser implements NotificationParser {
     private static final Pattern CARD_PAYMENT = Pattern.compile(
-            "^(.+?)\\s+(?:[^a-zA-Z0-9]*\\s*)?Hai speso ([0-9][0-9.,]*) €(?:\\s+Saldo di .+)?$",
+            "^(.+?)\\s+(?:[^a-zA-Z0-9]*\\s*)?Hai (?:speso|pagato) ([0-9][0-9.,]*) €(?:\\s+Saldo(?: di .+|: .+))?$",
             Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
     private static final Pattern SENT_TRANSFER = Pattern.compile(
             "Hai inviato ([0-9][0-9.,]*) € a (.+?)\\. Arriverà in pochi secondi$",
