@@ -16,6 +16,7 @@ public final class ParserRegistry {
     public static final String HYPE_PACKAGE = "it.hype.app";
     public static final String AMEX_PACKAGE = "com.americanexpress.android.acctsvcs.it";
     public static final String ADVANZIA_PACKAGE = "com.advanzia.mobile";
+    public static final String N26_PACKAGE = "de.number26.android";
 
     public static final class Provider {
         public final String packageName;
@@ -46,6 +47,7 @@ public final class ParserRegistry {
         registry.register(HYPE_PACKAGE, "hype", "HYPE", new HypeNotificationParser());
         registry.register(AMEX_PACKAGE, "amex", "American Express", new AmexNotificationParser());
         registry.register(ADVANZIA_PACKAGE, "advanzia", "Advanzia", new AdvanziaNotificationParser());
+        registry.register(N26_PACKAGE, "n26", "N26", new N26NotificationParser());
         return registry;
     }
 
