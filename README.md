@@ -14,7 +14,7 @@ Never share real names, account identifiers, IBANs, card numbers, notification I
 ## Use
 
 ```kotlin
-implementation("io.github.quintavallechristian:transaction-parsers:0.1.2")
+implementation("io.github.quintavallechristian:transaction-parsers:0.1.3")
 ```
 
 Packages are published to GitHub Packages. Configure
@@ -46,9 +46,10 @@ For transfers, the merchant is recorded as `Bonifico` followed by the IBAN. The 
 ### Revolut
 
 - Card payments: `Merchant Name Hai speso 12,50 €`
+- Bank payments: `Bank Name Hai pagato 200 € Saldo: 143,70 €`
 - Outgoing transfers: `Hai inviato 125 € a Recipient Name. Arriverà in pochi secondi`
 
-An optional card-payment suffix such as `Saldo di ...` is accepted.
+Optional balance suffixes `Saldo di ...` and `Saldo: ...` are accepted.
 
 ### BBVA
 
