@@ -68,6 +68,10 @@ Optional balance suffixes `Saldo di ...` and `Saldo: ...` are accepted.
 
 - Card payments: `Transazione con Carta Un pagamento di 12,50 € tramite la carta Mastercard che finisce con 1234 verso Merchant Name è stato effettuato correttamente.`
 
+### buddybank
+
+- Debit card payments: `Pagamento con carta di debito UniCredit segnala: autorizzato pagamento 12,50 EUR carta di debito XX1234 c/o Merchant Name 10/09/26 14:50 . Per info o blocco ...`
+
 ### Google Wallet
 
 - Card payments: `Merchant Name 12,50 € con ... •••• 1234`
