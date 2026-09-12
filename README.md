@@ -62,6 +62,7 @@ Optional balance suffixes `Saldo di ...` and `Saldo: ...` are accepted.
 ### American Express
 
 - Card payments: `Merchant Name 12,50 €`
+- Italian card payments: `Hai speso €12,50 presso Merchant Name con la tua Carta che termina con 1234.`
 
 ### Advanzia
 
