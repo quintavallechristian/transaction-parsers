@@ -72,6 +72,13 @@ public final class NotificationParserTest {
         assertEquals("EXAMPLE HOTEL", amex.merchant);
         assertEquals("amex-notification", amex.source);
         assertNull(new AmexNotificationParser().parse(TIME, "12,50 €"));
+        Transaction amexItalian = new AmexNotificationParser().parse(TIME,
+                "Amex IT Hai speso €15,00 presso EXAMPLE PIZZERIA con la tua Carta che termina con 1234.");
+        assertEquals("15.00", amexItalian.amount.toPlainString());
+        assertEquals("EXAMPLE PIZZERIA", amexItalian.merchant);
+        assertEquals("amex-notification", amexItalian.source);
+        assertNull(new AmexNotificationParser().parse(TIME,
+                "Hai speso €15,00 presso EXAMPLE PIZZERIA con la tua Carta che termina con 1234"));
 
         Transaction advanzia = new AdvanziaNotificationParser().parse(TIME,
                 "Transazione con Carta Un pagamento di 9,16 € tramite la carta Mastercard che finisce "
