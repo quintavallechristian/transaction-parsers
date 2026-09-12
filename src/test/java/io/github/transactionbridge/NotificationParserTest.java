@@ -92,6 +92,19 @@ public final class NotificationParserTest {
                         + "con 1234 verso EXAMPLE MARKET S.R.L. non è stato effettuato correttamente."));
     }
 
+    @Test public void parsesBuddyBankItalianDebitCardPayment() {
+        Transaction transaction = new BuddyBankNotificationParser().parse(TIME,
+                "Pagamento con carta di debito UniCredit segnala: autorizzato pagamento 4,43 EUR "
+                        + "carta di debito XX0000 c/o EXAMPLE MARKET CITY 10/09/26 14:50 . Per info o blocco 000000000");
+        assertEquals("4.43", transaction.amount.toPlainString());
+        assertEquals("EUR", transaction.currency);
+        assertEquals("EXAMPLE MARKET CITY", transaction.merchant);
+        assertEquals("buddybank-notification", transaction.source);
+        assertNull(new BuddyBankNotificationParser().parse(TIME,
+                "Pagamento con carta di debito UniCredit segnala: rifiutato pagamento 4,43 EUR "
+                        + "carta di debito XX0000 c/o EXAMPLE MARKET CITY 10/09/26 14:50 . Per info o blocco 000000000"));
+    }
+
     @Test public void parsesIsyBankDateAndMaskedTransferWithoutOwnerNames() {
         Transaction debit = new IsyBankNotificationParser().parse(TIME,
                 "E' stato addebitato il pagamento di una domiciliazione di 28,89 € da parte di EXAMPLE PROVIDER "
@@ -157,6 +170,7 @@ public final class NotificationParserTest {
         assertProvider(registry, ParserRegistry.HYPE_PACKAGE, "hype", "HYPE");
         assertProvider(registry, ParserRegistry.AMEX_PACKAGE, "amex", "American Express");
         assertProvider(registry, ParserRegistry.ADVANZIA_PACKAGE, "advanzia", "Advanzia");
+        assertProvider(registry, ParserRegistry.BUDDYBANK_PACKAGE, "buddybank", "buddybank");
         assertNull(registry.providerFor("com.example.other"));
     }
 
