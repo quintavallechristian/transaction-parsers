@@ -105,6 +105,17 @@ public final class NotificationParserTest {
                         + "carta di debito XX0000 c/o EXAMPLE MARKET CITY 10/09/26 14:50 . Per info o blocco 000000000"));
     }
 
+    @Test public void parsesBccCardRequest() {
+        Transaction transaction = new BccNotificationParser().parse(TIME,
+                "RelaxBanking Nuova richiesta su CartaBCC *000 di EUR 76,00");
+        assertEquals("76.00", transaction.amount.toPlainString());
+        assertEquals("EUR", transaction.currency);
+        assertEquals("CartaBCC", transaction.merchant);
+        assertEquals("bcc-notification", transaction.source);
+        assertNull(new BccNotificationParser().parse(TIME,
+                "RelaxBanking Richiesta rifiutata su CartaBCC *000 di EUR 76,00"));
+    }
+
     @Test public void parsesIsyBankDateAndMaskedTransferWithoutOwnerNames() {
         Transaction debit = new IsyBankNotificationParser().parse(TIME,
                 "E' stato addebitato il pagamento di una domiciliazione di 28,89 € da parte di EXAMPLE PROVIDER "
@@ -171,6 +182,7 @@ public final class NotificationParserTest {
         assertProvider(registry, ParserRegistry.AMEX_PACKAGE, "amex", "American Express");
         assertProvider(registry, ParserRegistry.ADVANZIA_PACKAGE, "advanzia", "Advanzia");
         assertProvider(registry, ParserRegistry.BUDDYBANK_PACKAGE, "buddybank", "buddybank");
+        assertProvider(registry, ParserRegistry.BCC_PACKAGE, "bcc", "BCC");
         assertNull(registry.providerFor("com.example.other"));
     }
 
