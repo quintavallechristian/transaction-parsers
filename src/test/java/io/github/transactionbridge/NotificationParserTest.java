@@ -25,6 +25,15 @@ public final class NotificationParserTest {
         assertEquals("ing-notification", directDebit.source);
         assertNull(new IngNotificationParser().parse(TIME,
                 "Addebito diretto di 7.99 euro richiesto da EXAMPLE MOBILE: in elaborazione."));
+
+        Transaction instantTransfer = new IngNotificationParser().parse(TIME,
+                "Bonifico istantaneo OK! Bonifico istantaneo di 700 euro: fatto! "
+                        + "Non sei stato tu? Contattaci subito.");
+        assertEquals("700", instantTransfer.amount.toPlainString());
+        assertEquals("Bonifico istantaneo", instantTransfer.merchant);
+        assertEquals("ing-notification", instantTransfer.source);
+        assertNull(new IngNotificationParser().parse(TIME,
+                "Bonifico istantaneo di 700 euro: in elaborazione."));
         assertNull(new IngNotificationParser().parse(TIME, "Saldo disponibile: 24.61 euro"));
 
         Transaction crypto = new CryptoComNotificationParser().parse(TIME,
@@ -105,6 +114,21 @@ public final class NotificationParserTest {
                         + "carta di debito XX0000 c/o EXAMPLE MARKET CITY 10/09/26 14:50 . Per info o blocco 000000000"));
     }
 
+    @Test public void parsesUniCreditItalianDebitCardPayment() {
+        Transaction transaction = new UniCreditNotificationParser().parse(TIME,
+                "Pagamento con carta di debito UniCredit segnala: autorizzato pagamento 12,34 EUR "
+                        + "carta di debito XX0000 c/o EXAMPLE SUPERMARKET 10/09/26 14:50 . "
+                        + "Per info o blocco 000000000");
+        assertEquals("12.34", transaction.amount.toPlainString());
+        assertEquals("EUR", transaction.currency);
+        assertEquals("EXAMPLE SUPERMARKET", transaction.merchant);
+        assertEquals("unicredit-notification", transaction.source);
+        assertNull(new UniCreditNotificationParser().parse(TIME,
+                "Pagamento con carta di debito UniCredit segnala: rifiutato pagamento 12,34 EUR "
+                        + "carta di debito XX0000 c/o EXAMPLE SUPERMARKET 10/09/26 14:50 . "
+                        + "Per info o blocco 000000000"));
+    }
+
     @Test public void parsesIsyBankDateAndMaskedTransferWithoutOwnerNames() {
         Transaction debit = new IsyBankNotificationParser().parse(TIME,
                 "E' stato addebitato il pagamento di una domiciliazione di 28,89 € da parte di EXAMPLE PROVIDER "
@@ -171,6 +195,7 @@ public final class NotificationParserTest {
         assertProvider(registry, ParserRegistry.AMEX_PACKAGE, "amex", "American Express");
         assertProvider(registry, ParserRegistry.ADVANZIA_PACKAGE, "advanzia", "Advanzia");
         assertProvider(registry, ParserRegistry.BUDDYBANK_PACKAGE, "buddybank", "buddybank");
+        assertProvider(registry, ParserRegistry.UNICREDIT_PACKAGE, "unicredit", "UniCredit");
         assertNull(registry.providerFor("com.example.other"));
     }
 
