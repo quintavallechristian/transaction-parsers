@@ -73,6 +73,10 @@ Optional balance suffixes `Saldo di ...` and `Saldo: ...` are accepted.
 
 - Debit card payments: `Pagamento con carta di debito UniCredit segnala: autorizzato pagamento 12,50 EUR carta di debito XX1234 c/o Merchant Name 10/09/26 14:50 . Per info o blocco ...`
 
+### BCC
+
+- Card requests: `RelaxBanking Nuova richiesta su CartaBCC *123 di EUR 12,50`
+
 ### UniCredit
 
 - Debit card payments: `Pagamento con carta di debito UniCredit segnala: autorizzato pagamento 12,50 EUR carta di debito XX1234 c/o Merchant Name 10/09/26 14:50 . Per info o blocco ...`
