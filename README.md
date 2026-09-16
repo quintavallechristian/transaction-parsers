@@ -14,7 +14,7 @@ Never share real names, account identifiers, IBANs, card numbers, notification I
 ## Use
 
 ```kotlin
-implementation("io.github.quintavallechristian:transaction-parsers:0.1.3")
+implementation("io.github.quintavallechristian:transaction-parsers:0.1.5")
 ```
 
 Packages are published to GitHub Packages. Configure
