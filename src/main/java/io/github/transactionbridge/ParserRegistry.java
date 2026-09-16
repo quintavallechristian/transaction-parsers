@@ -18,6 +18,7 @@ public final class ParserRegistry {
     public static final String ADVANZIA_PACKAGE = "com.advanzia.mobile";
     public static final String BUDDYBANK_PACKAGE = "eu.unicredit.internet.buddybank";
     public static final String BCC_PACKAGE = "it.relaxbanking";
+    public static final String UNICREDIT_PACKAGE = "com.unicredit";
 
     public static final class Provider {
         public final String packageName;
@@ -50,6 +51,7 @@ public final class ParserRegistry {
         registry.register(ADVANZIA_PACKAGE, "advanzia", "Advanzia", new AdvanziaNotificationParser());
         registry.register(BUDDYBANK_PACKAGE, "buddybank", "buddybank", new BuddyBankNotificationParser());
         registry.register(BCC_PACKAGE, "bcc", "BCC", new BccNotificationParser());
+        registry.register(UNICREDIT_PACKAGE, "unicredit", "UniCredit", new UniCreditNotificationParser());
         return registry;
     }
 

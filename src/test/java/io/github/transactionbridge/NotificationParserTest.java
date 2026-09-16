@@ -25,6 +25,7 @@ public final class NotificationParserTest {
         assertEquals("ing-notification", directDebit.source);
         assertNull(new IngNotificationParser().parse(TIME,
                 "Addebito diretto di 7.99 euro richiesto da EXAMPLE MOBILE: in elaborazione."));
+
         assertNull(new IngNotificationParser().parse(TIME, "Saldo disponibile: 24.61 euro"));
 
         Transaction crypto = new CryptoComNotificationParser().parse(TIME,
@@ -114,6 +115,21 @@ public final class NotificationParserTest {
         assertEquals("bcc-notification", transaction.source);
         assertNull(new BccNotificationParser().parse(TIME,
                 "RelaxBanking Richiesta rifiutata su CartaBCC *000 di EUR 76,00"));
+	}
+
+    @Test public void parsesUniCreditItalianDebitCardPayment() {
+        Transaction transaction = new UniCreditNotificationParser().parse(TIME,
+                "Pagamento con carta di debito UniCredit segnala: autorizzato pagamento 12,34 EUR "
+                        + "carta di debito XX0000 c/o EXAMPLE SUPERMARKET 10/09/26 14:50 . "
+                        + "Per info o blocco 000000000");
+        assertEquals("12.34", transaction.amount.toPlainString());
+        assertEquals("EUR", transaction.currency);
+        assertEquals("EXAMPLE SUPERMARKET", transaction.merchant);
+        assertEquals("unicredit-notification", transaction.source);
+        assertNull(new UniCreditNotificationParser().parse(TIME,
+                "Pagamento con carta di debito UniCredit segnala: rifiutato pagamento 12,34 EUR "
+                        + "carta di debito XX0000 c/o EXAMPLE SUPERMARKET 10/09/26 14:50 . "
+                        + "Per info o blocco 000000000"));
     }
 
     @Test public void parsesIsyBankDateAndMaskedTransferWithoutOwnerNames() {
@@ -183,6 +199,7 @@ public final class NotificationParserTest {
         assertProvider(registry, ParserRegistry.ADVANZIA_PACKAGE, "advanzia", "Advanzia");
         assertProvider(registry, ParserRegistry.BUDDYBANK_PACKAGE, "buddybank", "buddybank");
         assertProvider(registry, ParserRegistry.BCC_PACKAGE, "bcc", "BCC");
+        assertProvider(registry, ParserRegistry.UNICREDIT_PACKAGE, "unicredit", "UniCredit");
         assertNull(registry.providerFor("com.example.other"));
     }
 
