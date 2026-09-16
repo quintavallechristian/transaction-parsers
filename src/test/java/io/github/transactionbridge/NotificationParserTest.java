@@ -26,6 +26,14 @@ public final class NotificationParserTest {
         assertNull(new IngNotificationParser().parse(TIME,
                 "Addebito diretto di 7.99 euro richiesto da EXAMPLE MOBILE: in elaborazione."));
 
+        Transaction instantTransfer = new IngNotificationParser().parse(TIME,
+                "Bonifico istantaneo OK! Bonifico istantaneo di 700 euro: fatto! "
+                        + "Non sei stato tu? Contattaci subito.");
+        assertEquals("700", instantTransfer.amount.toPlainString());
+        assertEquals("Bonifico istantaneo", instantTransfer.merchant);
+        assertEquals("ing-notification", instantTransfer.source);
+        assertNull(new IngNotificationParser().parse(TIME,
+                "Bonifico istantaneo di 700 euro: in elaborazione."));
         assertNull(new IngNotificationParser().parse(TIME, "Saldo disponibile: 24.61 euro"));
 
         Transaction crypto = new CryptoComNotificationParser().parse(TIME,

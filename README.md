@@ -42,7 +42,7 @@ For transfers, the merchant is recorded as `Bonifico` followed by the IBAN. The 
 
 - Authorized card payments: `Operazione autorizzata: 12,50 euro, Merchant Name. Non sei stato tu?`
 - Direct debits: `Addebito diretto di 12,50 euro richiesto da Creditor id. ABC123 Merchant Name: pagato!`
-- Instant transfers: `Bonifico istantaneo di 700 euro: fatto! Non sei stato tu? Contattaci subito.`
+- Instant transfers: `Bonifico istantaneo OK! Bonifico istantaneo di 700 euro: fatto! Non sei stato tu? Contattaci subito.`
 
 ### Revolut
 

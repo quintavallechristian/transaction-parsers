@@ -12,17 +12,24 @@ public final class IngNotificationParser implements NotificationParser {
             "Addebito diretto di\\s*([0-9][0-9.,]*) euro richiesto da\\s+Creditor id\\.\\s+\\S+\\s+"
                     + "(.+?):\\s*pagato!(?=\\s|$)",
             Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+    private static final Pattern INSTANT_TRANSFER = Pattern.compile(
+            "Bonifico istantaneo di\\s*([0-9][0-9.,]*) euro:\\s*fatto!(?=\\s|$)",
+            Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
     @Override public Transaction parse(long occurredAt, String rawText) {
         String text = ParserSupport.normalize(rawText);
         Matcher matcher = PAYMENT.matcher(text);
         if (!matcher.find()) {
             matcher = DIRECT_DEBIT.matcher(text);
-            if (!matcher.find()) return null;
+            if (!matcher.find()) {
+                matcher = INSTANT_TRANSFER.matcher(text);
+                if (!matcher.find()) return null;
+            }
         }
         try {
             BigDecimal amount = ParserSupport.amount(matcher.group(1));
-            String merchant = matcher.group(2).trim();
+            String merchant = matcher.pattern() == INSTANT_TRANSFER
+                    ? "Bonifico istantaneo" : matcher.group(2).trim();
             return amount.signum() > 0 && !merchant.isEmpty()
                     ? new Transaction(occurredAt, amount, "EUR", merchant, text, "ing-notification")
                     : null;
